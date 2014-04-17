@@ -24,6 +24,9 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
 
 % Setup some useful variables
 m = size(X, 1);
+
+%Add columns of 1's matrix
+X = [ones(m,1) X];
          
 % You need to return the following variables correctly 
 J = 0;
@@ -38,6 +41,35 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
+
+a1 = X;
+z2 = Theta1 * a1';
+a2 = sigmoid(z2);
+%Add column of ones to X (bias unit)
+a2 = a2';
+a2 = [ones(size(a2)(1),1) a2];
+z3 = Theta2 * a2';
+a3 = sigmoid(z3);
+a3 = a3';
+h = a3; %h is m x k dimensional matrix. h(i,k) for ith training example cost corresponding to class k
+
+y_10 = zeros(10,1);
+sum = 0;
+for i = 1 : m,
+	
+	y_10 = zeros(10,1);
+	temp = y(i);
+	y_10(temp) = 1;
+	
+	sum = sum + y_10' * log(h(i,:))' + (1-y_10)' * log( 1 - h(i,:))';
+
+end
+	
+J = -(sum)/m;
+
+
+
+
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
