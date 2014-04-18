@@ -148,10 +148,20 @@ Theta2_grad = Delta2 /m;
 %Regularizing cost function. As only 3 layers. So, regularization from layer = 1 to layer = L-1 i.e 2
 % l = 1 . Input layer
 if lambda != 0,
+
+Theta1_without_bias = Theta1;
+Theta1_without_bias(:,1) = []; % Deleting first column . Size = 25 x 400
+
+Theta2_without_bias = Theta2;
+Theta2_without_bias(:,1) = [] ;% Deleting first column . Size = 10 x 25
+
+temp = Theta1_without_bias(:,1).^2;
+size(temp)
+
 sum_l1 = 0;
-for i = 1 : input_layer_size,
+for i = 1 : size(Theta1_without_bias)(2),
 	
-	temp = (Theta1(:,i)).^2;
+	temp = Theta1_without_bias(:,i).^2;
 	sum_int = 0;
 	for j = 1 : size(temp)(1),
 		sum_int = sum_int + temp(j);
@@ -159,13 +169,11 @@ for i = 1 : input_layer_size,
 	sum_l1 = sum_l1 + sum_int;
 
 end
-sum_l1
-
 
 sum_l2 = 0;
-for i = 1 : hidden_layer_size,
+for i = 1 : size(Theta2_without_bias)(2),
 	
-	temp = (Theta2(:,i)).^2;
+	temp = Theta2_without_bias(:,i).^2;
 	sum_int = 0;
 	for j = 1 : size(temp)(1),
 		sum_int = sum_int + temp(j);
@@ -173,9 +181,9 @@ for i = 1 : hidden_layer_size,
 	sum_l2 = sum_l2 + sum_int;
 
 end
-sum_l2
 
-reg_term_for_cost = lambda / ( 2 * m ) * (sum_l1 + sum_l2);
+reg_term_for_cost = sum_l1 + sum_l2;
+reg_term_for_cost = lambda * reg_term_for_cost / ( 2 * m)
 
 J = J + reg_term_for_cost;
 
