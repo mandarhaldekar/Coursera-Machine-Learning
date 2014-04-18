@@ -53,11 +53,11 @@ a3 = sigmoid(z3);
 a3 = a3';
 h = a3; %h is m x k dimensional matrix. h(i,k) for ith training example cost corresponding to class k
 
-y_10 = zeros(10,1);
+y_10 = zeros(max(y),1);
 sum = 0;
 for i = 1 : m,
 	
-	y_10 = zeros(10,1);
+	y_10 = zeros(max(y),1);
 	temp = y(i);
 	y_10(temp) = 1;
 	
