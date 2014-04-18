@@ -155,9 +155,6 @@ Theta1_without_bias(:,1) = []; % Deleting first column . Size = 25 x 400
 Theta2_without_bias = Theta2;
 Theta2_without_bias(:,1) = [] ;% Deleting first column . Size = 10 x 25
 
-temp = Theta1_without_bias(:,1).^2;
-size(temp)
-
 sum_l1 = 0;
 for i = 1 : size(Theta1_without_bias)(2),
 	
@@ -183,7 +180,7 @@ for i = 1 : size(Theta2_without_bias)(2),
 end
 
 reg_term_for_cost = sum_l1 + sum_l2;
-reg_term_for_cost = lambda * reg_term_for_cost / ( 2 * m)
+reg_term_for_cost = lambda * reg_term_for_cost / ( 2 * m);
 
 J = J + reg_term_for_cost;
 
