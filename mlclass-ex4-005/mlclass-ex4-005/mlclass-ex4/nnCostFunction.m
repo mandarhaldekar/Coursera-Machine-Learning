@@ -19,8 +19,13 @@ function [J grad] = nnCostFunction(nn_params, ...
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
 
+
+
+				 
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
+
+%size(Theta2) = 10 x 26
 
 % Setup some useful variables
 m = size(X, 1);
@@ -86,6 +91,52 @@ J = -(sum)/m;
 %               over the training examples if you are implementing it for the 
 %               first time.
 %
+
+y_10 = zeros(max(y),1);
+Delta2 = zeros(size(Theta2_grad));
+Delta1 = zeros(size(Theta1_grad));
+z2 = z2';
+z2 = [ones(size(z2)(1),1) z2]; % size of z2 = 5000 x 26
+
+%Step 1 : All activations a1, a2, a3 are computed as above
+for t = 1 : m,
+	
+	% Size of a3 = 5000 x 10
+	
+	
+	% Output vector for this training example
+	y_10 = zeros(max(y),1);
+	temp = y(t);
+	y_10(temp) = 1;
+	
+	% Step 2 :  Calculating delta term for the output
+	delta_3 = a3(t,:)' - y_10;  % Size of delta_3 = 10 x 1
+		
+	%Step 3: for hidden layer i.e  l = 2
+	
+	delta_2 = Theta2' * delta_3 .* (sigmoidGradient(z2(t,:)))';
+	
+	%Removing delta_2(0)
+	delta_2  = delta_2( 2 : end );  % size of delta_2 = 25 x 1
+	
+	
+	% Step 4 : Accumulate in DELTA. Note Delta2 corresponds to Theta2_grad , Delta1 corresponds to Theta1_grad
+	
+	%Size of a2 = 5000 x 26
+	Delta2 = Delta2 + delta_3 * a2(t,:);  % Size of Delta2 = 10 X 26
+	
+	%Size of a2 = 5000 x 401
+	Delta1 = Delta1 + delta_2 * a1(t,:); % Size of Delta2 = 25 X 401
+	
+
+	
+end
+
+Theta1_grad = Delta1 / m;
+Theta2_grad = Delta2 /m;
+
+
+
 % Part 3: Implement regularization with the cost function and gradients.
 %
 %         Hint: You can implement this around the code for
@@ -94,7 +145,51 @@ J = -(sum)/m;
 %               and Theta2_grad from Part 2.
 %
 
+%Regularizing cost function. As only 3 layers. So, regularization from layer = 1 to layer = L-1 i.e 2
+% l = 1 . Input layer
+if lambda != 0,
+sum_l1 = 0;
+for i = 1 : input_layer_size,
+	
+	temp = (Theta1(:,i)).^2;
+	sum_int = 0;
+	for j = 1 : size(temp)(1),
+		sum_int = sum_int + temp(j);
+	end
+	sum_l1 = sum_l1 + sum_int;
 
+end
+sum_l1
+
+
+sum_l2 = 0;
+for i = 1 : hidden_layer_size,
+	
+	temp = (Theta2(:,i)).^2;
+	sum_int = 0;
+	for j = 1 : size(temp)(1),
+		sum_int = sum_int + temp(j);
+	end
+	sum_l2 = sum_l2 + sum_int;
+
+end
+sum_l2
+
+reg_term_for_cost = lambda / ( 2 * m ) * (sum_l1 + sum_l2);
+
+J = J + reg_term_for_cost;
+
+
+
+%Making first column zero as they belong to bias term
+Theta1(:,1) = 0;
+Theta1_grad = Theta1_grad + lambda / m .* Theta1;
+
+
+Theta2(:,1)= 0 ;
+Theta2_grad = Theta2_grad + lambda / m .* Theta2;
+
+end % if ends here
 
 
 
