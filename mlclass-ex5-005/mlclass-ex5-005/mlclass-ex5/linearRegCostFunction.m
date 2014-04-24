@@ -19,9 +19,38 @@ grad = zeros(size(theta));
 %               You should set J to the cost and grad to the gradient.
 %
 
+J = ( X * theta - y ) .^ 2;
+J = sum(J);
+J = J / ( 2 * m);
+
+%Regularization
+regularization_term = 0 ; 
+%Deleting theta(0)
+theta_without_theta_zero = theta;
+theta_without_theta_zero(1,:) = [];  %First row deleted
+
+regularization_term = sum(theta_without_theta_zero .^ 2);
+regularization_term = regularization_term * lambda / ( 2 * m);
+
+%Final cost 
+J = J + regularization_term;
+
+% Gradient Descent
+
+%First find gradient descent without regularization
+
+temp =  X' * ( X * theta - y);
+%row-wise sum
+grad = sum(temp,2);
+grad = grad / m;
 
 
+% Regularization
+regularization_term = zeros(size(grad));
+regularization_term = theta .* (lambda/m);
+regularization_term(1,:) = 0; % as no regularization for theta0
 
+grad = grad + regularization_term;
 
 
 
