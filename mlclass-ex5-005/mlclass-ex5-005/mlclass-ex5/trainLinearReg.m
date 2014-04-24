@@ -5,6 +5,8 @@ function [theta] = trainLinearReg(X, y, lambda)
 %   the dataset (X, y) and regularization parameter lambda. Returns the
 %   trained parameters theta.
 %
+%  Using fmincg, this function finds value of theta for which cost function minimize for linear regression
+%
 
 % Initialize Theta
 initial_theta = zeros(size(X, 2), 1); 

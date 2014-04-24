@@ -90,10 +90,11 @@ plot(X, y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
 xlabel('Change in water level (x)');
 ylabel('Water flowing out of the dam (y)');
 hold on;
-plot(X, [ones(m, 1) X]*theta, '--', 'LineWidth', 2)
+plot(X, [ones(m, 1) X]*theta, '--', 'LineWidth', 2);
 hold off;
 
 fprintf('Program paused. Press enter to continue.\n');
+pause;
 pause;
 
 
