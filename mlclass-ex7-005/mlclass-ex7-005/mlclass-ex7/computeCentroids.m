@@ -34,9 +34,7 @@ for i = 1 : K,
 			summation = summation + X(j,:);
 		end
 	end
-	summation
-	number_of_K
-	pause
+	
 	centroids(i,:) = summation ./ number_of_K;
 	
 end
