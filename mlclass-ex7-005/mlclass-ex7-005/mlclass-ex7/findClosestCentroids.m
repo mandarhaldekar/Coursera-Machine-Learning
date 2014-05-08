@@ -23,17 +23,22 @@ idx = zeros(size(X,1), 1);
 %
 
 for i = 1 : m,
+	
 	distance = [];
+	
 	for j = 1 : K,
-		tempX = ( X(i) - centroids(j) ).^2;
-		distance(j) = sqrt(sum(tempX));
+		tempX = ( X(i,:) - centroids(j,:) ).^2;
+		distance(j) = sum(tempX);
 	end
+	
 	%min_index contains closest centroid index
 	[minimum, min_index] = min(distance);
 	
 	idx(i) = min_index;
 
 end
+
+pause;
 
 
 
