@@ -30,7 +30,7 @@ for i = 1 : m,
 		tempX = ( X(i,:) - centroids(j,:) ).^2;
 		distance(j) = sum(tempX);
 	end
-	
+	distance
 	%min_index contains closest centroid index
 	[minimum, min_index] = min(distance);
 	
