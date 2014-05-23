@@ -16,6 +16,9 @@ sim = 0;
 %
 %
 
+sqaured_difference_summation = sum((x1-x2).^2);
+sqaured_difference_summation = sqaured_difference_summation / ( 2 * sigma^2) * -1;
+sim = e^sqaured_difference_summation;
 
 
 

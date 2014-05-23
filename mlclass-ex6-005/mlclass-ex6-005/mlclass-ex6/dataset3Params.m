@@ -23,6 +23,28 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+%Find svmTrained model 
+C_array = [0.01 ; 0.03 ; 0.1 ; 0.3 ; 1 ; 3 ; 10 ; 30];
+sigma_array = [0.01 ; 0.03 ; 0.1 ; 0.3 ; 1 ; 3 ; 10 ; 30];
+min_error_index = [];
+min_error = e^1000;
+
+for i = 1 : numel(C_array),
+	for j = 1 : numel(sigma_array),
+	
+		model= svmTrain(X , y, C_array(i), @(x1, x2) gaussianKernel(x1, x2, sigma_array(j)));
+		predictions = svmPredict(model,Xval);
+		prediction_error = mean(double(predictions ~= yval));
+		if(prediction_error < min_error)
+			min_error = prediction_error;
+			min_error_index = [i;j];
+		end
+	end
+end
+
+C = C_array(min_error_index(1))
+sigma = sigma_array(min_error_index(2))
+
 
 
 
