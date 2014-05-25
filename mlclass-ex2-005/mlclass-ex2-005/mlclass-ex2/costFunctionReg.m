@@ -18,6 +18,28 @@ grad = zeros(size(theta));
 %               derivatives of the cost w.r.t. each parameter in theta
 
 
+%Logistic regression cost function
+h = sigmoid(X * theta);
+J = y' * log(h) + (1-y') * log(1-h);
+
+J = -J/m;
+
+%Regularizing it
+temp = theta;
+temp(1) = 0; % as we do not regularize for j = 0
+J = J + lambda / (2*m) * sum(temp.^2);
+
+
+% Calculating the gradient
+h = sigmoid(X * theta);
+error_term = h - y;  % (h(x)- y)
+
+grad = error_term' * X;   % ( h(x) - y) * X . Here size(grad) 1 X (n+1)
+grad = grad(:);   % Converting to column vector (n+1) X 1
+grad = grad./m ;
+
+%Regularizing gradient
+grad = grad + lambda/m * temp;
 
 
 
