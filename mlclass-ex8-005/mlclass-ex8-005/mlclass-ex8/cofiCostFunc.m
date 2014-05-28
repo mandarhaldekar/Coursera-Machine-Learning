@@ -40,7 +40,14 @@ Theta_grad = zeros(size(Theta));
 %                     partial derivatives w.r.t. to each element of Theta
 %
 
+error = X*Theta' - Y;
+squared_error = error.^2;
 
+% To consider elements where r(i,j) = 1. Cancelling out elemenets for which r(i,j) = 0 by multiplying R .* sqaured_error
+squared_error = squared_error .* R;
+
+J = sum( sum (squared_error));
+J = J / 2;
 
 
 
