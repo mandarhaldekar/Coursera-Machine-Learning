@@ -40,6 +40,8 @@ Theta_grad = zeros(size(Theta));
 %                     partial derivatives w.r.t. to each element of Theta
 %
 
+%%%%%%%%%%%%%% Cost function without Regularization %%%%%%%%%%%%%%%%%%%%%
+
 error = X*Theta' - Y;
 squared_error = error.^2;
 
@@ -49,14 +51,43 @@ squared_error = squared_error .* R;
 J = sum( sum (squared_error));
 J = J / 2;
 
+%****** Cost function with Regularization********%
+
+if(lambda != 0)
+	regularized_component_of_theta = Theta'.^2;
+	regularized_component_of_theta = sum(sum(regularized_component_of_theta));
+
+	regularized_component_of_X = X'.^2;
+	regularized_component_of_X =  sum(sum(regularized_component_of_X));
+
+	regularized_component = (regularized_component_of_theta + regularized_component_of_X) * lambda / 2 ;
+	
+	J = J + regularized_component;
+end
+%%%%%%%%%%%%%% Gradient without Regularization %%%%%%%%%%%%%%%%%%%%%
+
+
+error = X*Theta' - Y;
+%Cancelling out terms in ith row for which r(i,j) = 0
+error = error .* R ;
+X_grad = error * Theta; 
 
 
 
+error = X*Theta' - Y;
+error = error' ;
+%Cancelling out terms in ith row for which r(i,j) = 0
+error = error .* R';
+Theta_grad = error * X; 
 
 
+if(lambda != 0)
+	X_grad = X_grad + X .* lambda;
+end
 
-
-
+if(lambda != 0)
+	Theta_grad = Theta_grad + Theta .* lambda;
+end
 
 
 
